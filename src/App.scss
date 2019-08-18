@@ -1,0 +1,187 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Indie Flower', 'Permanent Marker', cursive;
+}
+.navbar {
+  background-color: aqua;
+  &__elements {
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.board {
+  background-color: beige;
+  width: 100%;
+  // height: 80vh;
+  position: fixed;
+
+  &__elements {
+    border: 1px dotted black;
+    margin: 5rem;
+    text-align: center;
+    font-size: 1.5em;
+  }
+
+  &__element {
+    font-size: 1.5em;
+    width: max-content;
+    // display: none;
+    // position: fixed;
+    &--hidden {
+      margin-right: 0.5rem;
+      opacity: 0;
+      animation: 2s linear 2s forwards appear;
+    }
+  }
+}
+
+.welcome {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: lightgreen;
+  z-index: 2;
+
+  & > .form {
+    font-family: 'Luckiest Guy', cursive;
+    position: fixed;
+    left: 50%;
+    top: 50vh;
+    transform: translate(-50%, -50%) scale(2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    & h2 {
+      margin: 1rem;
+      border: none;
+    }
+    & input {
+      text-align: center;
+      border: none;
+      background-color: rgba(1,1,1,0);
+    }
+
+    & button {
+      margin: 1rem 16px;
+      border-radius: 1.5rem;
+      border: none;
+      padding: 0.25rem 0;
+      transition: transform 1s;
+      background-color: lightgoldenrodyellow;
+
+      &:hover {
+        transform: scale(1.2);
+        transition: transform 1s;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &--blur {
+    filter: blur(10px)
+  }
+}
+
+.loading {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 3;
+  display: block;
+  & > div {
+    position: fixed;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    transform: translateY(-100%) scale(4);
+    animation: 1s ease-out 0s blink infinite alternate;
+  }
+}
+
+.add-form {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  font-family: 'Indie Flower', 'Permanent Marker', cursive !important;
+
+  & h2 {
+    text-align: center;
+  }
+
+  & select {
+    padding: 0.5rem;
+    background-color: rgba(1,1,1,0);
+    border: none;
+  }
+
+  &__input {
+    position: relative;
+    margin: 0.5rem 0;
+
+    & > div {
+      width: 100%;
+      display: flex;
+
+      & > input {
+        flex-grow: 1;
+        padding: 0 1rem;
+      }
+    }
+
+    & > span {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+    
+  }
+}
+
+.shake {
+  animation: 1s ease-out 0s shake 1;
+}
+
+.display-none {
+  display: none;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  70% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

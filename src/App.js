@@ -1,26 +1,65 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Navbar from './Navbar';
+import Board from './Board';
+import Welcome from './Welcome';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    user: null,
+    welcome: true,
+    users: [],
+  }
+
+  handleChangeUser = username => {
+    const _user = this.state.users.find(el => el.username === username)
+    if (_user) {
+      this.setState({ user: username, welcome: false })
+      localStorage.setItem('user', username)
+      return true
+    }
+    return false
+  }
+
+  handleLogout = () => {
+    this.setState({ user: null, welcome: true })
+    localStorage.setItem('user', 'null')
+  }
+
+  handleSaveIncome = (username, amount) => {
+    const _user = this.state.users.find(el => el.username === username)
+    if (_user)
+      this.setState(state => ({ users: state.users.map(el => el.username === username ? { ...el, value: parseInt(el.value) + parseInt(amount) } : el) }))
+  }
+
+  componentDidMount() {
+    if (!localStorage.getItem('user') || localStorage.getItem('user') === 'null') {
+      localStorage.setItem('user', 'null')
+    }
+    else {
+      this.setState({ user: localStorage.getItem('user'), welcome: false })
+    }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Navbar handleLogout={this.handleLogout} />
+        {
+          this.state.welcome
+            ?
+            <Welcome
+              handleChangeUser={this.handleChangeUser}
+            />
+            :
+            <Board
+              users={this.state.users}
+              handleSaveIncome={this.handleSaveIncome}
+            />
+        }
+      </div>
+    );
+  }
 }
 
 export default App;
