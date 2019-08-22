@@ -1,8 +1,9 @@
 import React from 'react';
 import './App.scss';
-import Navbar from './Navbar';
-import Board from './Board';
-import Welcome from './Welcome';
+import Navbar from './components/Navbar';
+import Board from './components/Board';
+import Welcome from './components/Welcome';
+// import database from './firebase/firebase'
 
 class App extends React.Component {
   state = {
@@ -42,6 +43,8 @@ class App extends React.Component {
   }
 
   render() {
+
+
     return (
       <div className="App">
         <Navbar handleLogout={this.handleLogout} />

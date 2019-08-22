@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 const AddForm = props => {
   const options = props.users.sort((a, b) => b.label < a.label ? 1 : -1)
   const [amount, setAmount] = useState('')
+  const [msg, setMsg] = useState('')
 
   const handleChangeInput = e => {
     if (!isNaN(e.target.value))
@@ -15,6 +16,7 @@ const AddForm = props => {
     if (username) {
       props.handleSaveIncome(username, amount)
       setAmount('')
+      setMsg('')
       select.value = 'Choose One'
     }
   }
@@ -33,13 +35,18 @@ const AddForm = props => {
       <div className="add-form__input">
         <div>
           <input
-            placeholder="amount"
+            placeholder="Amount"
             value={amount}
             onChange={handleChangeInput}
           />
         </div>
         <span>$</span>
       </div>
+      <input 
+        placeholder="Message"
+        value={msg}
+        onChange={e => setMsg(e.target.value)}
+      />
       <button onClick={handleSaveIncome}>Add Income</button>
     </div>
   )
