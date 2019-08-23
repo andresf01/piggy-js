@@ -3,19 +3,25 @@ import './App.scss';
 import Navbar from './components/Navbar';
 import Board from './components/Board';
 import Welcome from './components/Welcome';
-// import database from './firebase/firebase'
+import database from './firebase/firebase'
+import moment from 'moment'
+import { v1 as uuid } from 'uuid'
 
 class App extends React.Component {
   state = {
     user: null,
     welcome: true,
-    users: [],
+    users: [
+      { label: 'Paola Cruz', value: 5, username: 'pacruz', inbox: [] },
+      { label: 'Leroy Mwanzia', value: 10, username: 'lmwanzia', inbox: [] },
+      { label: 'Andres Martinez', value: 3, username: 'amartinez', inbox: [] },
+    ],
   }
 
   handleChangeUser = username => {
     const _user = this.state.users.find(el => el.username === username)
     if (_user) {
-      this.setState({ user: username, welcome: false })
+      this.setState({ user: _user, welcome: false })
       localStorage.setItem('user', username)
       return true
     }
@@ -27,10 +33,13 @@ class App extends React.Component {
     localStorage.setItem('user', 'null')
   }
 
-  handleSaveIncome = (username, amount) => {
-    const _user = this.state.users.find(el => el.username === username)
+  handleSaveIncome = (username, amount, message) => {
+    let _user = this.state.users.find(el => el.username === username)
+    const date = moment()
+    _user.value += amount
+    _user.inbox = [..._user.inbox, { id: uuid(),author: this.state.user.username, message, date, amount }]
     if (_user)
-      this.setState(state => ({ users: state.users.map(el => el.username === username ? { ...el, value: parseInt(el.value) + parseInt(amount) } : el) }))
+      this.setState(state => ({ users: state.users.map(el => el.username === username ? _user : el) }))
   }
 
   componentDidMount() {
@@ -38,7 +47,8 @@ class App extends React.Component {
       localStorage.setItem('user', 'null')
     }
     else {
-      this.setState({ user: localStorage.getItem('user'), welcome: false })
+      const user = this.state.users.find(el => el.username === localStorage.getItem('user'))
+      this.setState({ user , welcome: false })
     }
   }
 
@@ -47,7 +57,6 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <Navbar handleLogout={this.handleLogout} />
         {
           this.state.welcome
             ?
@@ -55,10 +64,14 @@ class App extends React.Component {
               handleChangeUser={this.handleChangeUser}
             />
             :
-            <Board
-              users={this.state.users}
-              handleSaveIncome={this.handleSaveIncome}
-            />
+            <React.Fragment>
+              <Navbar handleLogout={this.handleLogout} />
+              <Board
+                users={this.state.users}
+                handleSaveIncome={this.handleSaveIncome}
+                inbox={this.state.user.inbox}
+              />
+            </React.Fragment>
         }
       </div>
     );

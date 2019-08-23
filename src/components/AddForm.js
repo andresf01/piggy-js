@@ -14,10 +14,10 @@ const AddForm = props => {
     const select = document.getElementById('selected_user')
     const username = select.value
     if (username) {
-      props.handleSaveIncome(username, amount)
+      props.handleSaveIncome(username, amount, msg)
       setAmount('')
       setMsg('')
-      select.value = 'Choose One'
+      select.value = ''
     }
   }
 
@@ -42,7 +42,8 @@ const AddForm = props => {
         </div>
         <span>$</span>
       </div>
-      <input 
+      <input
+        className="add-form__input"
         placeholder="Message"
         value={msg}
         onChange={e => setMsg(e.target.value)}

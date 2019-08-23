@@ -1,35 +1,54 @@
+html {
+  min-height: 100vh;
+}
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Indie Flower', 'Permanent Marker', cursive;
+  font-family: 'Indie Flower', cursive;
+  background-color: rgba(128, 214, 240, 0.2);
 }
+
 .navbar {
-  background-color: aqua;
+  border-bottom: 0.2px solid lightgray;
+  font-size: 2em;
   &__elements {
     padding: 0.75rem;
     display: flex;
     justify-content: space-between;
+
+    & > *:nth-child(2) {
+      cursor: pointer;
+      transition: 0.25s ease-in transform;
+      &:hover {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  & > *:nth-child(2) {
+    flex-grow: 1;
   }
 }
 
 .board {
-  background-color: beige;
   width: 100%;
-  // height: 80vh;
-  position: fixed;
 
   &__elements {
-    border: 1px dotted black;
-    margin: 5rem;
     text-align: center;
     font-size: 1.5em;
+    padding: 2rem 0;
   }
 
   &__element {
     font-size: 1.5em;
     width: max-content;
-    // display: none;
-    // position: fixed;
     &--hidden {
       margin-right: 0.5rem;
       opacity: 0;
@@ -42,7 +61,6 @@ body {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100vh;
   background-color: lightgreen;
   z-index: 2;
 
@@ -71,7 +89,7 @@ body {
       border: none;
       padding: 0.25rem 0;
       transition: transform 1s;
-      background-color: lightgoldenrodyellow;
+      background-color: lightgray;
 
       &:hover {
         transform: scale(1.2);
@@ -122,6 +140,10 @@ body {
     border: none;
   }
 
+  input {
+    padding: 0.5rem 1rem;
+  }
+
   &__input {
     position: relative;
     margin: 0.5rem 0;
@@ -132,7 +154,6 @@ body {
 
       & > input {
         flex-grow: 1;
-        padding: 0 1rem;
       }
     }
 
@@ -140,8 +161,14 @@ body {
       position: absolute;
       left: 0;
       top: 0;
+      transform: scale(1.3) translate(30%,30%);
     }
-    
+  }
+
+  button {
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
   }
 }
 
@@ -151,6 +178,43 @@ body {
 
 .display-none {
   display: none;
+}
+
+.grid-col-2 {
+  display: grid;
+  grid-template: auto / repeat(2, 1fr);
+  grid-gap: 0.5rem;
+
+  @media (max-width: 600px) {
+    grid-template: auto / 1fr;
+  }
+}
+
+h1, h2 {
+  margin: 0;
+  text-align: center;
+  font-family: 'Permanent Marker', cursive;
+}
+
+.messages {
+  overflow: auto;
+  max-height: 40vh;
+
+  & > *:nth-child(2n - 1) {
+    background-color: rgba(240, 128, 128, 0.2);
+  }
+}
+
+.message {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 2rem;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }
 
 @keyframes appear {

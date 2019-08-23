@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import BoardElement from './BoardElement';
 import AddForm from './AddForm';
+import Messages from './Messages'
 
 const Board = props => {
   const [registers, setRegisters] = useState([])
@@ -8,10 +9,6 @@ const Board = props => {
   useEffect(() => {
     setRegisters(props.users.sort((a, b) => b.value - a.value))
   }, [props.users])
-
-  const handleSaveIncome = (username, amount) => {
-    props.handleSaveIncome(username, amount)
-  }
 
   return (
     <div className="board">
@@ -30,10 +27,14 @@ const Board = props => {
           })
         }
       </div>
-      <div>
+      <div className="grid-col-2">
         <AddForm
           users={props.users}
-          handleSaveIncome={handleSaveIncome}
+          handleSaveIncome={props.handleSaveIncome}
+        />
+        <Messages
+          inbox={props.inbox}
+          users={props.users}
         />
       </div>
     </div>
