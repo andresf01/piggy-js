@@ -11,7 +11,7 @@ class App extends React.Component {
   state = {
     user: null,
     welcome: true,
-    users: [
+    users: [],
       { label: 'Paola Cruz', value: 5, username: 'pacruz', inbox: [] },
       { label: 'Leroy Mwanzia', value: 10, username: 'lmwanzia', inbox: [] },
       { label: 'Andres Martinez', value: 3, username: 'amartinez', inbox: [] },
