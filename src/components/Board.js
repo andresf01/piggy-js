@@ -5,10 +5,12 @@ import Messages from './Messages'
 
 const Board = props => {
   const [registers, setRegisters] = useState([])
+  const [inbox, setInbox] = useState([])
 
   useEffect(() => {
     setRegisters(props.users.sort((a, b) => b.value - a.value))
-  }, [props.users])
+    setInbox(props.users.find(el => el.username === props.username).inbox || [])
+  }, [props.users, props.username])
 
   return (
     <div className="board">
@@ -33,7 +35,7 @@ const Board = props => {
           handleSaveIncome={props.handleSaveIncome}
         />
         <Messages
-          inbox={props.inbox}
+          inbox={inbox}
           users={props.users}
         />
       </div>

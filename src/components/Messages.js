@@ -7,7 +7,7 @@ const Messages = props => {
     <div>
       <h2>Messages</h2>
       {
-        inbox.length 
+        inbox.length
         ? <div className="messages">
           {
             inbox.map(el =>
