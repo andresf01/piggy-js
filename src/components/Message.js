@@ -6,7 +6,7 @@ const Message = props => {
     <div className="message">
       <div className="message__header">
         <span>{props.user.label} (${props.amount})</span> 
-        <span>{moment(props.date).calendar()}</span>
+        <span>{moment(props.date, 'X').calendar()}</span>
       </div>
       <div>{props.message}</div>
     </div>

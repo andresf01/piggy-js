@@ -9,52 +9,52 @@ import { v1 as uuid } from 'uuid'
 
 class App extends React.Component {
   state = {
-    user: null,
+    username: null,
     welcome: true,
     users: [],
-      { label: 'Paola Cruz', value: 5, username: 'pacruz', inbox: [] },
-      { label: 'Leroy Mwanzia', value: 10, username: 'lmwanzia', inbox: [] },
-      { label: 'Andres Martinez', value: 3, username: 'amartinez', inbox: [] },
-    ],
   }
 
   handleChangeUser = username => {
-    const _user = this.state.users.find(el => el.username === username)
-    if (_user) {
-      this.setState({ user: _user, welcome: false })
-      localStorage.setItem('user', username)
+    const { username: _username } = this.state.users.find(el => el.username === username)
+    if (_username) {
+      this.setState({ username, welcome: false })
+      localStorage.setItem('username', username)
       return true
     }
     return false
   }
 
   handleLogout = () => {
-    this.setState({ user: null, welcome: true })
+    this.setState({ username: null, welcome: true })
     localStorage.setItem('user', 'null')
   }
 
   handleSaveIncome = (username, amount, message) => {
     let _user = this.state.users.find(el => el.username === username)
-    const date = moment()
-    _user.value += amount
-    _user.inbox = [..._user.inbox, { id: uuid(),author: this.state.user.username, message, date, amount }]
-    if (_user)
-      this.setState(state => ({ users: state.users.map(el => el.username === username ? _user : el) }))
+    const date = moment().format('X')
+    _user.value += parseInt(amount)
+    if (_user.inbox && _user.inbox.length)
+      _user.inbox = [..._user.inbox, { id: uuid(), author: this.state.username, message, date, amount }]
+    else
+      _user.inbox = [{ id: uuid(), author: this.state.username, message, date, amount }]
+    if (_user) {
+      database.ref(`users/${username}`).update(_user).then(() => {
+        this.setState(state => ({ users: state.users.map(el => el.username === username ? _user : el) }))
+      })
+    }
   }
 
   componentDidMount() {
-    if (!localStorage.getItem('user') || localStorage.getItem('user') === 'null') {
-      localStorage.setItem('user', 'null')
-    }
-    else {
-      const user = this.state.users.find(el => el.username === localStorage.getItem('user'))
-      this.setState({ user , welcome: false })
-    }
+    database.ref('users').on('value', (snapshot) => {
+      const _users = snapshot.val()
+      const users = []
+      for (let item in _users)
+        users.push(_users[item])
+      this.setState({ users })
+    })
   }
 
   render() {
-
-
     return (
       <div className="App">
         {
@@ -69,7 +69,7 @@ class App extends React.Component {
               <Board
                 users={this.state.users}
                 handleSaveIncome={this.handleSaveIncome}
-                inbox={this.state.user.inbox}
+                username={this.state.username}
               />
             </React.Fragment>
         }
