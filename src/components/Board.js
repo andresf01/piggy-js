@@ -20,9 +20,9 @@ const Board = props => {
           registers.map((el, i) => {
             return (
               <BoardElement
-                key={el.label.split(" ").join()}
+                key={el.name.split(" ").join()}
                 className="board__element"
-                label={el.label}
+                label={el.name}
                 value={el.value}
               />
             )

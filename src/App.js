@@ -3,9 +3,9 @@ import './App.scss';
 import Navbar from './components/Navbar';
 import Board from './components/Board';
 import Welcome from './components/Welcome';
-import database from './firebase/firebase'
 import moment from 'moment'
 import { v1 as uuid } from 'uuid'
+import app from './service/feathers'
 
 class App extends React.Component {
   state = {
@@ -37,28 +37,31 @@ class App extends React.Component {
       _user.inbox = [..._user.inbox, { id: uuid(), author: this.state.username, message, date, amount }]
     else
       _user.inbox = [{ id: uuid(), author: this.state.username, message, date, amount }]
-    if (_user) {
+    /* if (_user) {
       database.ref(`users/${username}`).update(_user).then(() => {
         this.setState(state => ({ users: state.users.map(el => el.username === username ? _user : el) }))
       })
-    }
+    } */
   }
 
-  componentDidMount() {
-    database.ref('users').on('value', (snapshot) => {
-      const _users = snapshot.val()
-      const users = []
-      for (let item in _users)
-        users.push(_users[item])
+  async componentDidMount() {
+    app.service('users').on('created', el => {
+      this.setState(state => ({ users: [...state.users, el] }))
+    });
+    
+    Promise.resolve(app.service('users').find())
+    .then(users => {
       this.setState({ users })
     })
   }
 
   render() {
+    const { users, username, welcome } = this.state
+
     return (
       <div className="App">
         {
-          this.state.welcome
+          welcome
             ?
             <Welcome
               handleChangeUser={this.handleChangeUser}
@@ -67,9 +70,9 @@ class App extends React.Component {
             <React.Fragment>
               <Navbar handleLogout={this.handleLogout} />
               <Board
-                users={this.state.users}
+                users={users}
                 handleSaveIncome={this.handleSaveIncome}
-                username={this.state.username}
+                username={username}
               />
             </React.Fragment>
         }

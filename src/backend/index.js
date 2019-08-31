@@ -1,22 +1,21 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
-const mongoose = require('mongoose')
-const UserSchema = require('./models/user')
+const UserService = require('./services/user')
 
-mongoose.connect('mongodb://localhost/rankjs', { useNewUrlParser: true })
+// mongoose.connect('mongodb://localhost/rankjs', { useNewUrlParser: true })
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log('connected to db')
-});
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', function () {
+//   console.log('connected to db')
+// });
 
-var User = db.model("User", UserSchema)
+// var User = db.model("User", UserSchema)
 
 // A messages service that allows to create new
 // and return all existing messages
-class MessageService {
+/* class MessageService {
   constructor() {
     this.messages = User.find();
   }
@@ -39,7 +38,7 @@ class MessageService {
 
     return message;
   }
-}
+} */
 
 // Creates an ExpressJS compatible Feathers application
 const app = express(feathers());
@@ -55,7 +54,7 @@ app.configure(express.rest());
 // Configure Socket.io real-time APIs
 app.configure(socketio());
 // Register an in-memory messages service
-app.use('/messages', new MessageService());
+app.use('/users', new UserService());
 // Register a nicer error handler than the default Express one
 app.use(express.errorHandler());
 
@@ -73,6 +72,6 @@ app.listen(3030).on('listening', () =>
 
 // For good measure let's create a message
 // So our API doesn't look so empty
-app.service('messages').create({
-  text: 'Hello world from the server'
-});
+// app.service('users').create({
+//   text: 'Hello world from the server'
+// });
