@@ -1,20 +1,32 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const socketio = require('@feathersjs/socketio');
+const mongoose = require('mongoose')
+const UserSchema = require('./models/user')
+
+mongoose.connect('mongodb://localhost/rankjs', { useNewUrlParser: true })
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function () {
+  console.log('connected to db')
+});
+
+var User = db.model("User", UserSchema)
 
 // A messages service that allows to create new
 // and return all existing messages
 class MessageService {
   constructor() {
-    this.messages = [];
+    this.messages = User.find();
   }
 
-  async find () {
+  async find() {
     // Just return all our messages
     return this.messages;
   }
 
-  async create (data) {
+  async create(data) {
     // The new message is the data merged with a unique identifier
     // using the messages length since it changes whenever we add one
     const message = {
